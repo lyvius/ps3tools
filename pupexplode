@@ -35,7 +35,7 @@ for f in *.pkg; do
 done
 
 cd ..
-for f in $(find -type f -print0); do
+for f in $(find . -type f -print0); do
     if readself $f &> /dev/null; then
         print -n "Unselfing $f... "
         if unself $f ${f}.elf &> /dev/null; then
