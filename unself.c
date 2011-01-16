@@ -312,6 +312,9 @@ static struct keylist *self_load_keys(void)
 		case 3:
 			id = KEY_LV2;
 			break;
+		case 8:
+			id = KEY_APP;
+			break;
 		case 4:
 			id = KEY_APP;
 			break;
@@ -356,8 +359,7 @@ int main(int argc, char *argv[])
 	read_header();
 	read_sections();
 
-	if (key_ver != 0x8000)
-		self_decrypt();
+	self_decrypt();
 
 	out = fopen(argv[2], "wb+");
 

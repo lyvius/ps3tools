@@ -153,7 +153,10 @@ static struct keylist *self_load_keys(void)
 		case 3:
 			id = KEY_LV2;
 			break;
-		case 4:	
+		case 8:
+			id = KEY_APP;
+			break;
+		case 4:
 			id = KEY_APP;
 			break;
 		case 5:
@@ -161,9 +164,6 @@ static struct keylist *self_load_keys(void)
 			break;
 		case 6:
 			id = KEY_LDR;
-			break;
-		case 8:
-			return NULL;
 			break;
 		default:
 			fail("invalid type: %08x", app_type);	

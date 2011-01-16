@@ -4,6 +4,7 @@
 // http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 #include <sys/types.h>
+#include <sys/mman.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -631,15 +632,27 @@ int sce_decrypt_header(u8 *ptr, struct keylist *klist)
 	u32 meta_offset;
 	u32 meta_len;
 	u64 header_len;
-	u32 i, j;
+	u32 i, j, k;
 	u8 tmp[0x40];
 	int success = 0;
 
 
 	meta_offset = be32(ptr + 0x0c);
 	header_len  = be64(ptr + 0x10);
-
+    unsigned char *erkptr;
+    unsigned char *rivptr;
 	for (i = 0; i < klist->n; i++) {
+		erkptr = (unsigned char *)&klist->keys[i].key;
+		rivptr = (unsigned char *)&klist->keys[i].iv;
+		printf(" ERK: ");
+		for(k=0;k<32;k++){
+        printf("%2.2X", *erkptr++);
+		}
+        printf(" RIV: ");
+        for(k=0;k<16;k++){
+        printf("%2.2X", *rivptr++);
+        }
+        printf(" ID: %u " ,i);
 		aes256cbc(klist->keys[i].key,
 			  klist->keys[i].iv,
 			  ptr + meta_offset + 0x20,
@@ -657,8 +670,13 @@ int sce_decrypt_header(u8 *ptr, struct keylist *klist)
 
 		if (success == 1) {
 			memcpy(ptr + meta_offset + 0x20, tmp, 0x40);
+			printf("...Yep!\n");
 			break;
 		}
+		if (success == 0)
+            printf("..Nope\n");
+        else
+            printf("\n");
 	}
 
 	if (success != 1)
