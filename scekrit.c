@@ -58,6 +58,9 @@ static struct keylist *self_load_keys(fileinfo* info)
 		case 4:	
 			id = KEY_APP;
 			break;
+		case 8:	
+			id = KEY_APP;
+			break;
 		case 5:
 			id = KEY_ISO;
 			break;
