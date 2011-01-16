@@ -1,5 +1,7 @@
 *~
 *.o
+cospkg
+cosunpkg
 pupunpack
 readself
 unself
