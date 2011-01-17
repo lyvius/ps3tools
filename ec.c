@@ -314,6 +314,12 @@ int ecdsa_set_curve(u32 type)
 {
 	if (ecdsa_get_params(type, ec_p, ec_a, ec_b, ec_N, ec_G.x, ec_G.y) < 0)
 		return -1;
+	bn_print("p", ec_p, 20);
+	bn_print("a", ec_a, 20);
+	bn_print("b", ec_b, 20);
+	bn_print("N", ec_N, 21);
+	bn_print("Gx", ec_G.x, 20);
+	bn_print("Gy", ec_G.y, 20);
 
 	bn_to_mon(ec_a, ec_p, 20);
 	bn_to_mon(ec_b, ec_p, 20);
