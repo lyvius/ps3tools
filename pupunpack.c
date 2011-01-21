@@ -23,7 +23,7 @@ static u64 hdr_size;
 
 static struct id2name_tbl t_names[] = {
 	{0x100, "version.txt"},
-	{0x101, "license.txt"},
+	{0x101, "license.xml"},
 	{0x102, "promo_flags.txt"},
 	{0x103, "update_flags.txt"},
 	{0x104, "patch_build.txt"},
