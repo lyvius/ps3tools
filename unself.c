@@ -179,6 +179,10 @@ static void write_elf(void)
 
 			offset += size;
 
+			printf("compressed self_sections[i].offset 0x%x self_sections[i].size 0x%x\n",
+				self_sections[i].offset,self_sections[i].size);
+
+
 			decompress(self + self_sections[i].offset,
 			           self_sections[i].size,
 				   bfr, size);
