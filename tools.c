@@ -410,15 +410,18 @@ static int key_build_path(char *ptr)
 
 	memset(ptr, 0, 256);
 
-	dir = getenv("SONY_KEYS");
+	dir = getenv("PS3_KEYS");
 	if (dir != NULL) {
 		strncpy(ptr, dir, 256);
 		return 0;
 	}
 
 	home = getenv("HOME");
-	if (home == NULL)
-		return -1;
+	if (home == NULL) {
+		home = getenv("USERPROFILE");
+		if (home == NULL)
+			return -1;
+        }
 
 	snprintf(ptr, 256, "%s/.ps3/", home);
 
