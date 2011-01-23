@@ -12,7 +12,7 @@ endif
 
 CC	=  gcc
 CFLAGS	=  -g -O2 -Wall -W
-LDLIBS  =  -lz -lgmp
+LDLIBS  =  -lz
 
 # Darwin's MacPorts Default Path
 ifeq ($(shell test -e /opt/local/include/gmp.h; echo $$?),0)
@@ -26,6 +26,9 @@ all: $(TOOLS)
 
 $(TOOLS): %: %.o $(COMMON) $(DEPS)
 	$(CC) $(CFLAGS) -o $@ $< $(COMMON) $(LDLIBS) 
+
+scekrit: %: %.o $(COMMON) $(DEPS)
+	$(CC) $(CFLAGS) -o $@ $< $(COMMON) $(LDLIBS) -lgmp
 
 $(OBJS): %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
