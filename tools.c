@@ -646,10 +646,12 @@ int sce_decrypt_header(u8 *ptr, struct keylist *klist)
 		rivptr = (unsigned char *)&klist->keys[i].iv;
 		printf(" ERK: ");
 		for(k=0;k<32;k++){
+	printf("\\x");
         printf("%2.2X", *erkptr++);
 		}
         printf(" RIV: ");
         for(k=0;k<16;k++){
+	printf("\\x");
         printf("%2.2X", *rivptr++);
         }
         printf(" ID: %u " ,i);
