@@ -208,7 +208,7 @@ static void remove_shnames(u64 shdr_offset, u16 n_shdr, u64 shstrtab_offset, u32
 	for (i = 0; i < n_shdr; i++) {
 		elf_read_shdr(arch64, elf + shdr_offset + i * size, &s);
 
-		s.sh_name = 0;
+		s.sh_name = 1 + 3*i;
 		if (s.sh_type == 3) {
 			s.sh_offset = shstrtab_offset;
 			s.sh_size = strtab_size;
@@ -229,8 +229,10 @@ static void check_elf(void)
 	u64 shstrtab_offset;
 	u16 n_phdr;
 	u16 n_shdr;
-	const char shstrtab[] = ".unknown\0\0";
+	char shstrtab[256] = {0};
 	const char elf_magic[4] = {0x7f, 'E', 'L', 'F'};
+
+
 
 	fseek(out, 0, SEEK_SET);
 	fread(bfr, 4, 1, out);
@@ -253,7 +255,12 @@ static void check_elf(void)
 		n_shdr = be16(elf + 0x3c);
 		shstrtab_offset = shdr_offset_new + n_shdr * 0x40;
 
-		remove_shnames(shdr_offset, n_shdr, shstrtab_offset, sizeof shstrtab);
+        int i;
+        for (i = 0; i < n_shdr; i++) {
+            sprintf(shstrtab + 1 + 3*i, "%02i", i);
+        }
+
+		remove_shnames(shdr_offset, n_shdr, shstrtab_offset, 1 + 3 * n_shdr);
 
 		fseek(out, phdr_offset_new, SEEK_SET);
 		fwrite(elf + phdr_offset, 0x38, n_phdr, out);
@@ -268,7 +275,7 @@ static void check_elf(void)
 		fwrite(elf, 0x48, 1, out);
 
 		fseek(out, shstrtab_offset, SEEK_SET);
-		fwrite(shstrtab, sizeof shstrtab, 1, out);
+		fwrite(shstrtab, 1 + 3 * n_shdr, 1, out);
 	} else {
 		fseek(out, 0x34, SEEK_SET);
 		phdr_offset_new = 0x34;
@@ -278,8 +285,13 @@ static void check_elf(void)
 		n_phdr = be16(elf + 0x2c);
 		n_shdr = be16(elf + 0x30);
 		shstrtab_offset = shdr_offset_new + n_shdr * 0x40;
+        
+        int i;
+        for (i = 0; i < n_shdr; i++) {
+            sprintf(shstrtab + 1 + 3*i, "%02i", i);
+        }
 
-		remove_shnames(shdr_offset, n_shdr, shstrtab_offset, sizeof shstrtab);
+		remove_shnames(shdr_offset, n_shdr, shstrtab_offset, 1 + 3 * n_shdr);
 
 		fseek(out, phdr_offset_new, SEEK_SET);
 		fwrite(elf + phdr_offset, 0x20, n_phdr, out);
@@ -294,7 +306,7 @@ static void check_elf(void)
 		fwrite(elf, 0x34, 1, out);
 
 		fseek(out, shstrtab_offset, SEEK_SET);
-		fwrite(shstrtab, sizeof shstrtab, 1, out);
+		fwrite(shstrtab, 1 + 3 * n_shdr, 1, out);
 	}
 }
 
