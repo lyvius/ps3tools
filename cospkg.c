@@ -96,7 +96,7 @@ static void build_hdr(void)
 
 	wbe32(p + 0x00, 1);	// magic
 	wbe32(p + 0x04, n_files);
-	wbe32(p + 0x08, hdr_size + file_size);
+	wbe64(p + 0x08, hdr_size + file_size);
 	p += 0x10;
 
 	for (i = 0; i < n_files; i++) {
